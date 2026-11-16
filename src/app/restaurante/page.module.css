@@ -1,0 +1,49 @@
+.page {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.25rem;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + 2rem) var(--gutter) 3rem;
+  text-align: center;
+  background:
+    radial-gradient(50% 50% at 50% 30%, rgba(226, 83, 47, 0.16), transparent 70%),
+    var(--ink);
+}
+
+.plate {
+  width: min(52vw, 13rem);
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  max-width: 12em;
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+}
+
+.text {
+  max-width: 34rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.3vw, 1.1875rem);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .plate {
+    animation: turn 40s linear infinite;
+  }
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}

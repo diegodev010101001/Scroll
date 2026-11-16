@@ -1,0 +1,407 @@
+/*
+  Escenario de los cuatro giros.
+
+  Sin movimiento (o sin JS): las escenas se apilan una debajo de otra, cada
+  una legible por sí sola. Con movimiento: la sección mide (N + 1) pantallas,
+  el contenedor se fija con position: sticky y las escenas se superponen.
+*/
+
+.stage {
+  position: relative;
+  background: var(--ink);
+}
+
+.pin {
+  position: relative;
+}
+
+.wipe {
+  display: none;
+}
+
+/* Escena -------------------------------------------------------------------- */
+
+.scene {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+  background: var(--s-bg);
+  color: var(--s-ink);
+
+  /* Caja de arte (móvil): arriba, centrada y tan grande como deje el texto */
+  --art-size: max(8.5rem, min(92vw, calc(100svh - var(--header-h) - 25.5rem)));
+  --art-left: calc(50% - var(--art-size) / 2);
+  --art-top: calc(var(--header-h) + 0.25rem);
+}
+
+.art,
+.zoom {
+  position: absolute;
+  inset: 0;
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + var(--art-size) + 0.75rem) var(--gutter) 1rem;
+}
+
+/* Textos ---------------------------------------------------------------------- */
+
+.brandRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.brandName {
+  font-family: var(--s-font), var(--font-display-stack);
+  font-size: 1.125rem;
+  font-weight: var(--s-weight);
+  letter-spacing: var(--s-tracking);
+  text-transform: var(--s-transform);
+  line-height: 1;
+}
+
+.tag {
+  padding: 0.25rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--s-ink) 30%, transparent);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--s-muted);
+}
+
+.title {
+  font-family: var(--s-font), var(--font-display-stack);
+  font-size: calc(clamp(1.85rem, 8.3vw, 2.7rem) * var(--s-scale));
+  font-weight: var(--s-weight);
+  line-height: var(--s-leading);
+  letter-spacing: var(--s-tracking);
+  text-transform: var(--s-transform);
+}
+
+.title em {
+  font-style: var(--s-em-style, normal);
+  color: var(--s-accent);
+}
+
+.desc {
+  max-width: 31rem;
+  margin-top: 0.7rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--s-muted);
+}
+
+.servicesLabel {
+  display: none;
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--s-muted);
+}
+
+/* Chips: un estilo por personalidad ----------------------------------------- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  counter-reset: chip;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.65rem;
+  background: var(--s-surface);
+  color: var(--s-ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+  counter-increment: chip;
+}
+
+.chipIcon {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: none;
+  color: var(--s-accent);
+}
+
+/* pill — cálido y redondo (cafetería) */
+.scene[data-chip="pill"] .chip {
+  border: 1px solid color-mix(in srgb, var(--s-ink) 16%, transparent);
+  border-radius: 999px;
+}
+
+/* sharp — bloque de neón inclinado (gimnasio) */
+.scene[data-chip="sharp"] .chip {
+  padding-inline: 0.9rem;
+  background: var(--s-accent);
+  color: var(--s-on-accent);
+  font-family: var(--s-font), var(--font-display-stack);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  clip-path: polygon(0.55rem 0, 100% 0, calc(100% - 0.55rem) 100%, 0 100%);
+}
+
+.scene[data-chip="sharp"] .chipIcon {
+  display: none;
+}
+
+/* soft — tarjeta blanca con sombra suave (clínica dental) */
+.scene[data-chip="soft"] .chip {
+  border-radius: 0.9rem;
+  box-shadow: 0 6px 18px rgba(15, 42, 71, 0.1);
+}
+
+.scene[data-chip="soft"] .chipIcon {
+  padding: 0.14rem;
+  border-radius: 50%;
+  background: var(--s-accent);
+  color: var(--s-on-accent);
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* plate — placa industrial numerada (taller) */
+.scene[data-chip="plate"] .chip {
+  border-left: 3px solid var(--s-accent);
+  border-radius: 3px;
+  font-family: var(--s-font), var(--font-display-stack);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.scene[data-chip="plate"] .chip::before {
+  content: counter(chip, decimal-leading-zero);
+  color: var(--s-accent);
+}
+
+.scene[data-chip="plate"] .chipIcon {
+  display: none;
+}
+
+/* Contador y barra de progreso ------------------------------------------------ */
+
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+.counter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-family: var(--s-font), var(--font-display-stack);
+  font-weight: var(--s-weight);
+  line-height: 1;
+}
+
+.counterNow {
+  font-size: 1.6rem;
+}
+
+.counterTotal {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.progress {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: color-mix(in srgb, var(--s-ink) 20%, transparent);
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  inset: 0;
+  background: var(--s-accent);
+  transform-origin: left center;
+  /* Versión estática: la barra marca qué giro es. Con movimiento la lleva GSAP. */
+  transform: scaleX(var(--s-progress));
+}
+
+.hudLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--s-muted);
+}
+
+/* Móviles bajos: la ilustración cede espacio al texto */
+@media (max-width: 767.98px) and (max-height: 700px) {
+  .scene {
+    --art-size: max(8rem, min(84vw, calc(100svh - var(--header-h) - 22.75rem)));
+  }
+
+  .brandRow {
+    margin-bottom: 0.4rem;
+  }
+
+  .desc {
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+}
+
+/* Escritorio -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .scene {
+    --art-size: min(46vw, 74svh);
+    --art-top: calc(50svh - var(--art-size) / 2 + 0.5rem);
+  }
+
+  .scene[data-layout="art-right"] {
+    --art-left: calc(100% - var(--art-size) - 5vw);
+  }
+
+  .scene[data-layout="art-left"] {
+    --art-left: 5vw;
+  }
+
+  .inner {
+    justify-content: center;
+    padding: calc(var(--header-h) + 1rem) var(--gutter) 5.5rem;
+  }
+
+  .copy {
+    width: min(42vw, 37rem);
+  }
+
+  .scene[data-layout="art-left"] .copy {
+    margin-left: auto;
+  }
+
+  .brandRow {
+    margin-bottom: 1.1rem;
+  }
+
+  .brandName {
+    font-size: 1.375rem;
+  }
+
+  .title {
+    font-size: calc(clamp(2.3rem, 4.5vw, 4.9rem) * var(--s-scale));
+  }
+
+  .desc {
+    margin-top: 1.25rem;
+    font-size: clamp(1rem, 1.2vw, 1.1875rem);
+    line-height: 1.55;
+  }
+
+  .servicesLabel {
+    display: block;
+  }
+
+  .chips {
+    gap: 0.55rem;
+    margin-top: 0.8rem;
+  }
+
+  .chip {
+    gap: 0.4rem;
+    padding: 0.6rem 0.95rem;
+    font-size: 0.9375rem;
+  }
+
+  .chipIcon {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .scene[data-chip="sharp"] .chip,
+  .scene[data-chip="plate"] .chip {
+    font-size: 1.0625rem;
+  }
+
+  .hud {
+    position: absolute;
+    inset: auto var(--gutter) 1.75rem;
+    gap: 1.25rem;
+    margin: 0;
+  }
+
+  .counterNow {
+    font-size: 2.1rem;
+  }
+
+  .hudLabel {
+    font-size: 0.75rem;
+  }
+}
+
+/* Con movimiento: escenario fijo --------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .stage {
+    height: calc((var(--scene-count) + 1) * 100vh);
+    height: calc((var(--scene-count) + 1) * 100lvh);
+  }
+
+  .pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    /* lvh: el fondo cubre también la zona de la barra del navegador móvil */
+    height: 100lvh;
+    overflow: clip;
+  }
+
+  .scene,
+  .wipe {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+
+  /* svh: textos y contador siempre dentro de la zona visible */
+  .inner {
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+  }
+
+  /* Estados que marca useStageTimeline */
+  .scene[data-scene-state="idle"] .art {
+    visibility: hidden;
+  }
+
+  .scene[data-scene-state="live"] [data-layer],
+  .scene[data-scene-state="active"] [data-layer] {
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .wipe {
+    display: block;
+    clip-path: circle(0% at 50% 50%);
+  }
+}

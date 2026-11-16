@@ -1,0 +1,145 @@
+.process {
+  position: relative;
+  padding: clamp(5rem, 12vw, 10rem) var(--gutter) clamp(3rem, 6vw, 5rem);
+  background: var(--ink);
+}
+
+.layout {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+.title {
+  margin-block: 1.1rem 1.25rem;
+  max-width: 9em;
+}
+
+/* Lista con línea ----------------------------------------------------------- */
+
+.listWrap {
+  position: relative;
+  --node: 2.5rem;
+}
+
+.line {
+  position: absolute;
+  top: calc(var(--node) / 2);
+  bottom: calc(var(--node) / 2);
+  left: calc(var(--node) / 2 - 1px);
+  width: 2px;
+  background: var(--line);
+}
+
+.lineFill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--c-cafe), var(--c-gym), var(--c-dental), var(--c-taller));
+}
+
+.list {
+  display: grid;
+  gap: clamp(2.25rem, 6vw, 4.5rem);
+}
+
+.step {
+  position: relative;
+  padding-left: calc(var(--node) + clamp(1rem, 3vw, 2rem));
+}
+
+.step:nth-child(1) {
+  --step-color: var(--c-cafe);
+}
+
+.step:nth-child(2) {
+  --step-color: var(--c-gym);
+}
+
+.step:nth-child(3) {
+  --step-color: var(--c-dental);
+}
+
+.step:nth-child(4) {
+  --step-color: var(--c-taller);
+}
+
+/* Tapa el tramo de línea que sobra debajo del último paso. */
+.step:last-child::before {
+  content: "";
+  position: absolute;
+  top: var(--node);
+  bottom: -4rem;
+  left: 0;
+  width: var(--node);
+  background: var(--ink);
+}
+
+.node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: var(--node);
+  height: var(--node);
+  border: 2px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.dot {
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  background: var(--step-color);
+}
+
+.number {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--step-color);
+}
+
+.stepTitle {
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.stepText {
+  max-width: 30rem;
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.15vw, 1.125rem);
+}
+
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  /* El encabezado acompaña mientras pasan los pasos. */
+  .head {
+    position: sticky;
+    top: calc(var(--header-h) + 4rem);
+  }
+
+  .listWrap {
+    --node: 3rem;
+    padding-block: 1rem 3rem;
+  }
+
+  .line {
+    top: calc(1rem + var(--node) / 2);
+    bottom: calc(3rem + var(--node) / 2);
+  }
+
+  .list {
+    gap: clamp(4rem, 11vh, 7rem);
+  }
+}

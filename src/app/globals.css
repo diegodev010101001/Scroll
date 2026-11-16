@@ -1,0 +1,295 @@
+/* Tokens ------------------------------------------------------------------ */
+
+:root {
+  /* Marca DiegoDev: tinta y papel, más los cuatro colores de los giros */
+  --ink: #0c0b10;
+  --ink-2: #15141b;
+  --ink-3: #201e29;
+  --paper: #f5f1e8;
+  --paper-2: #e7e1d3;
+  --muted: #aaa6b8;
+  --line: rgba(245, 241, 232, 0.12);
+  --line-strong: rgba(245, 241, 232, 0.28);
+
+  --c-cafe: #e9c79a;
+  --c-gym: #c8ff2e;
+  --c-dental: #4f9df0;
+  --c-taller: #ff6a13;
+
+  --font-display-stack: var(--font-display), "Segoe UI", system-ui, sans-serif;
+  --font-sans-stack: var(--font-sans), "Segoe UI", system-ui, sans-serif;
+
+  --gutter: clamp(1.25rem, 5vw, 5.5rem);
+  --header-h: 4rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset ------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--ink);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans-stack);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* clip (no hidden): evita el desborde horizontal sin romper position: sticky */
+  overflow-x: clip;
+}
+
+main {
+  overflow-x: clip;
+}
+
+svg {
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display-stack);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--c-gym);
+  color: var(--ink);
+}
+
+/* Utilidades -------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Palabras con máscara (SplitWords): la interior sube desde abajo. */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0.1em 0.06em 0.2em;
+  margin: -0.1em -0.06em -0.2em;
+}
+
+.word__inner {
+  display: inline-block;
+}
+
+/* Barra de cuatro colores: firma visual de "cuatro giros". */
+.fourbar {
+  display: inline-flex;
+  width: 2.75rem;
+  height: 0.3rem;
+  border-radius: 999px;
+  overflow: hidden;
+  flex: none;
+}
+
+.fourbar i {
+  flex: 1;
+}
+
+.fourbar i:nth-child(1) {
+  background: var(--c-cafe);
+}
+
+.fourbar i:nth-child(2) {
+  background: var(--c-gym);
+}
+
+.fourbar i:nth-child(3) {
+  background: var(--c-dental);
+}
+
+.fourbar i:nth-child(4) {
+  background: var(--c-taller);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-title {
+  font-size: clamp(2.25rem, 5.4vw, 4.5rem);
+}
+
+.section-lead {
+  max-width: 34rem;
+  font-size: clamp(1rem, 1.25vw, 1.1875rem);
+  color: var(--muted);
+}
+
+/* Botones ----------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.8rem 1.5rem;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+  cursor: pointer;
+  /* Solo se anima transform; los colores cambian al instante. */
+  transition: transform 0.4s var(--ease-out);
+}
+
+.btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:hover svg:last-child {
+  transform: translateX(3px);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn--paper {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.btn--paper:hover {
+  background: #fff;
+}
+
+.btn--ghost {
+  border-color: var(--line-strong);
+  color: var(--paper);
+}
+
+.btn--ghost:hover {
+  border-color: var(--paper);
+}
+
+.btn--ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn--ink:hover {
+  background: #000;
+}
+
+.btn--outline-ink {
+  border-color: rgba(12, 11, 16, 0.3);
+  color: var(--ink);
+}
+
+.btn--outline-ink:hover {
+  border-color: var(--ink);
+}
+
+.btn--whatsapp {
+  background: #25d366;
+  color: #052e16;
+}
+
+.btn--whatsapp:hover {
+  background: #3be37b;
+}
+
+.btn--lg {
+  min-height: 3.75rem;
+  padding: 1rem 1.9rem;
+  font-size: 1.0625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn svg {
+    transition: none;
+  }
+
+  .btn:hover,
+  .btn:hover svg:last-child {
+    transform: none;
+  }
+}

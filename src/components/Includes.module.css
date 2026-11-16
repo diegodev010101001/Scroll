@@ -1,0 +1,150 @@
+.includes {
+  position: relative;
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter) clamp(5rem, 12vw, 10rem);
+  background: var(--ink);
+  overflow: clip;
+}
+
+.wrap {
+  max-width: 84rem;
+  margin-inline: auto;
+}
+
+.head {
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.title {
+  margin-block: 1.1rem 1.25rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+}
+
+.card:nth-child(1) {
+  --card-color: var(--c-cafe);
+}
+
+.card:nth-child(2) {
+  --card-color: var(--c-gym);
+}
+
+.card:nth-child(3) {
+  --card-color: var(--c-dental);
+}
+
+.card:nth-child(4) {
+  --card-color: var(--c-taller);
+}
+
+/* La tarjeta la mueve GSAP; el hover vive en el interior para no chocar. */
+.cardInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(1.5rem, 2.4vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: var(--ink-2);
+  overflow: hidden;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.cardInner::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--card-color);
+  transform: scaleX(0.18);
+  transform-origin: left center;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 1.1rem;
+  background: color-mix(in srgb, var(--card-color) 14%, transparent);
+  color: var(--card-color);
+}
+
+.icon svg {
+  width: 2.35rem;
+  height: 2.35rem;
+}
+
+.index {
+  font-family: var(--font-display-stack);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.cardTitle {
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  letter-spacing: -0.025em;
+}
+
+.cardText {
+  margin-top: 0.75rem;
+  color: var(--muted);
+}
+
+.points {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.points li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.points svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  color: var(--card-color);
+}
+
+@media (hover: hover) {
+  .card:hover .cardInner {
+    transform: translateY(-8px);
+    border-color: color-mix(in srgb, var(--card-color) 55%, transparent);
+  }
+
+  .card:hover .cardInner::before {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardInner,
+  .cardInner::before {
+    transition: none;
+  }
+
+  .card:hover .cardInner {
+    transform: none;
+  }
+}

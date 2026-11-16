@@ -1,0 +1,160 @@
+/* Capas de ilustración ---------------------------------------------------- */
+
+.layer {
+  position: absolute;
+  pointer-events: none;
+}
+
+.layer > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fondo a sangre: sobra un poco arriba y abajo para que el parallax
+   nunca deje ver el borde. */
+.bleed {
+  inset: -6% 0;
+}
+
+/* Caja de arte: el escenario define tamaño y posición con variables. */
+.box {
+  top: var(--art-top, 0);
+  left: var(--art-left, 0);
+  width: var(--art-size, 100%);
+  height: var(--art-size, 100%);
+}
+
+.box > svg {
+  overflow: visible;
+}
+
+/* Foto en lugar de ilustración (ScenePhoto) */
+.photo {
+  object-fit: cover;
+}
+
+.cutout {
+  object-fit: contain;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--s-bg, #000);
+  opacity: 0.55;
+}
+
+/* Móvil: menos capas y menos detalle */
+@media (max-width: 767.98px) {
+  .layer[data-layer="front"],
+  .layer [data-desktop-only] {
+    display: none;
+  }
+}
+
+/* Animaciones en reposo (solo transform y opacity) ------------------------ */
+
+.steam,
+.pulse,
+.twinkle,
+.bob {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .steam {
+    animation: steam 3.8s ease-in-out infinite;
+  }
+
+  .pulse {
+    animation: pulse 2.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  }
+
+  .twinkle {
+    animation: twinkle 2.8s ease-in-out infinite;
+  }
+
+  .bob {
+    animation: bob 5s ease-in-out infinite;
+  }
+
+  .delay1 {
+    animation-delay: -0.9s;
+  }
+
+  .delay2 {
+    animation-delay: -1.8s;
+  }
+
+  .delay3 {
+    animation-delay: -2.7s;
+  }
+
+  /* Dentro del escenario solo se anima la escena activa. */
+  [data-scene-state]:not([data-scene-state="active"]) .steam,
+  [data-scene-state]:not([data-scene-state="active"]) .pulse,
+  [data-scene-state]:not([data-scene-state="active"]) .twinkle,
+  [data-scene-state]:not([data-scene-state="active"]) .bob,
+  [data-offscreen] .steam,
+  [data-offscreen] .pulse,
+  [data-offscreen] .twinkle,
+  [data-offscreen] .bob {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (max-width: 767.98px) {
+  .twinkle,
+  .bob {
+    animation: none;
+  }
+}
+
+@keyframes steam {
+  0% {
+    transform: translateY(12px) scaleY(0.85);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(-28px) scaleY(1.12);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.55) rotate(0deg);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.1) rotate(18deg);
+    opacity: 1;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
